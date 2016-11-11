@@ -31,6 +31,7 @@ public class BuildingJSONParser {
                 building.setName(obj.getString("name"));
                 building.setAddress(obj.getString("address"));
                 building.setBuildingId(obj.getInt("buildingId"));
+
                 building.setImage(obj.getString("image"));
                 JSONArray open_hours = obj.getJSONArray("open_hours");
                 List<String> list = new ArrayList<String>();

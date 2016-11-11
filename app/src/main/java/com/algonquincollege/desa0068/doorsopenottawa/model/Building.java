@@ -13,7 +13,7 @@ import java.util.List;
 
 public class Building {
 
-    private static DateFormat DATE_FORMAT=new SimpleDateFormat("EEE,MMM,d,yyyy - hh:mm");
+    private static DateFormat DATE_FORMAT = new SimpleDateFormat("EEE,MMM,d,yyyy - hh:mm");
     private int buildingId;
     private String name;
     private String address;
@@ -61,13 +61,11 @@ public class Building {
         this.open_hours = open_hours;
     }
 
-    public void setBitmap(Bitmap bitmapimg)
-    {
-      this.bitmapimg=bitmapimg;
+    public void setBitmap(Bitmap bitmapimg) {
+        this.bitmapimg = bitmapimg;
     }
 
-    public Bitmap getBitmapimg()
-    {
+    public Bitmap getBitmapimg() {
         return bitmapimg;
     }
 }

@@ -1,4 +1,3 @@
-
 /*This class is used to create a asynctask which helps in getting the json data and placing it in the list adapter.
 It marks the starting point of the app
 @author Vaibhavi Desai (desa0068@algonquinlive.com)
@@ -17,6 +16,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.algonquincollege.desa0068.doorsopenottawa.model.Building;
 import com.algonquincollege.desa0068.doorsopenottawa.parsers.BuildingJSONParser;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class MainActivity extends ListActivity {
 
     private ProgressBar pb;
     private List<MyTask> tasks;
-    private List buildingList;
+    private List<Building> buildingList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +39,11 @@ public class MainActivity extends ListActivity {
         pb.setVisibility(View.INVISIBLE);
 
         tasks = new ArrayList<>();
+        if (isOnline()) {
+            requestData(REST_URI);
+        } else {
+            Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -93,6 +98,8 @@ public class MainActivity extends ListActivity {
         @Override
         protected String doInBackground(String... params) {
             String content = HttpManager.getData(params[0]);
+            buildingList = BuildingJSONParser.parseFeed(content);
+
             return content;
         }
 
