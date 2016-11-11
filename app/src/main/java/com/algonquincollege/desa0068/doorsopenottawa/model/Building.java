@@ -2,7 +2,8 @@ package com.algonquincollege.desa0068.doorsopenottawa.model;
 
 import android.graphics.Bitmap;
 
-import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -12,11 +13,12 @@ import java.util.List;
 
 public class Building {
 
+    private static DateFormat DATE_FORMAT=new SimpleDateFormat("EEE,MMM,d,yyyy - hh:mm");
     private int buildingId;
     private String name;
     private String address;
     private String image;
-    private List<String> date;
+    private List<String> open_hours;
     private Bitmap bitmapimg;
 
     public int getBuildingId() {
@@ -51,12 +53,12 @@ public class Building {
         this.image = image;
     }
 
-    public List<String> getDate() {
-        return date;
+    public List<String> getOpen_hours() {
+        return open_hours;
     }
 
-    public void setDate(List<String> date) {
-        this.date = date;
+    public void setOpen_hours(List<String> open_hours) {
+        this.open_hours = open_hours;
     }
 
     public void setBitmap(Bitmap bitmapimg)

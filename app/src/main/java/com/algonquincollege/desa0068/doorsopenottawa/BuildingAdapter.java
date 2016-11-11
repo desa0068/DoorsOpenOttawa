@@ -3,8 +3,6 @@ package com.algonquincollege.desa0068.doorsopenottawa;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +12,6 @@ import android.widget.TextView;
 
 import com.algonquincollege.desa0068.doorsopenottawa.model.Building;
 
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -51,8 +46,8 @@ public class BuildingAdapter extends ArrayAdapter<Building> {
 
         buildingDate = (TextView)view.findViewById(R.id.itemdate);
         String date="";
-        for(int i=0;i<building.getDate().size();i++) {
-            date+=building.getDate().get(i)+"\n";
+        for(int i = 0; i<building.getOpen_hours().size(); i++) {
+            date+=building.getOpen_hours().get(i)+"\n";
         }
 
         buildingDate.setText("Date and Time is:"+"\n"+date);

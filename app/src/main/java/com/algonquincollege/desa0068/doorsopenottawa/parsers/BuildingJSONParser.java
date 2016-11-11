@@ -32,12 +32,12 @@ public class BuildingJSONParser {
                 building.setAddress(obj.getString("address"));
                 building.setBuildingId(obj.getInt("buildingId"));
                 building.setImage(obj.getString("image"));
-                JSONArray calArray = obj.getJSONArray("calendar");
+                JSONArray open_hours = obj.getJSONArray("open_hours");
                 List<String> list = new ArrayList<String>();
-                for (int j = 0; j < calArray.length(); j++) {
-                    list.add(calArray.getJSONObject(j).getString("date"));
+                for (int j = 0; j < open_hours.length(); j++) {
+                    list.add(open_hours.getJSONObject(j).getString("date"));
                 }
-                building.setDate(list);
+                building.setOpen_hours(list);
                 listbuilding.add(building);
             }
             return listbuilding;
