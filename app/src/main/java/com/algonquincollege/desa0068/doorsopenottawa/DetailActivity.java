@@ -1,22 +1,17 @@
 package com.algonquincollege.desa0068.doorsopenottawa;
 
-
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -67,11 +62,12 @@ public class DetailActivity extends FragmentActivity implements OnMapReadyCallba
             date += open_hours.get(i) + "\n";
         }
         buildingOpenHours.setText("Open Hours:"+"\n"+date);
-        pin(b.getString("building_address"));
+
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        pin(b.getString("building_address"));
     }
 }
