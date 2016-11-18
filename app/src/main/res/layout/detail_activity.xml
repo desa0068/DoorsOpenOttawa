@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/building_name_placeholder"
+        android:id="@+id/lblbuildingname"
+        android:textStyle="bold"
+        android:textSize="17dp"/>
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/buildingname"
+        android:layout_toRightOf="@+id/lblbuildingname"
+        android:paddingLeft="10dp">
+    </TextView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/building_description_placeholder"
+        android:id="@+id/lblbuildingdescription"
+        android:textStyle="bold"
+        android:layout_below="@+id/lblbuildingname"
+        android:textSize="17dp"/>
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/buildingdescription"
+        android:layout_below="@+id/lblbuildingdescription">
+    </TextView>
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/lblbuildingaddress"
+        android:text="@string/building_address_placeholder"
+        android:layout_below="@+id/buildingdescription">
+    </TextView>
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/buildingaddress"
+        android:layout_below="@+id/lblbuildingaddress">
+    </TextView>
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/openhours"
+        android:layout_below="@+id/buildingaddress">
+    </TextView>
+
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/openhours"
+        />
+
+
+</RelativeLayout>

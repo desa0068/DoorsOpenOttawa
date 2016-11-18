@@ -29,7 +29,7 @@ public class BuildingAdapter extends ArrayAdapter<Building> {
 
     private Context context;
     private List<Building> buildingList;
-    private TextView buildingId, buildingName, buildingAddress, buildingDate;
+    private TextView buildingId, buildingName, buildingDescription;
     private LruCache<Integer, Bitmap> imageCache;
 
 
@@ -54,7 +54,8 @@ public class BuildingAdapter extends ArrayAdapter<Building> {
 
         buildingName = (TextView) view.findViewById(R.id.itemname);
         buildingName.setText(building.getName());
-
+        buildingDescription = (TextView)view.findViewById(R.id.itemdescription);
+        buildingDescription.setText(building.getDescription());
 //        buildingDate = (TextView) view.findViewById(R.id.itemdate);
 //        String date = "";
 //        for (int i = 0; i < building.getOpen_hours().size(); i++) {

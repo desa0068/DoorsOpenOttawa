@@ -21,6 +21,17 @@ public class Building {
     private List<String> open_hours;
     private Bitmap bitmapimg;
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    private String description;
+
+
     public int getBuildingId() {
         return buildingId;
     }
