@@ -38,6 +38,7 @@ public class BuildingAdapter extends ArrayAdapter<Building> {
         this.context = context;
         this.buildingList = building;
 
+        //Specifying the cache memory size
         final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
         final int cacheSize = maxMemory / 8;
         imageCache = new LruCache<>(cacheSize);
@@ -56,15 +57,9 @@ public class BuildingAdapter extends ArrayAdapter<Building> {
         buildingName.setText(building.getName());
         buildingDescription = (TextView)view.findViewById(R.id.itemdescription);
         buildingDescription.setText(building.getDescription());
-//        buildingDate = (TextView) view.findViewById(R.id.itemdate);
-//        String date = "";
-//        for (int i = 0; i < building.getOpen_hours().size(); i++) {
-//            date += building.getOpen_hours().get(i) + "\n";
-//        }
-//
-//        buildingDate.setText("Date and Time is:" + "\n" + date);
-
         Bitmap bitmap = imageCache.get(building.getBuildingId());
+
+        //Loads the image from cache
         if (bitmap != null) {
 
             ImageView image = (ImageView) view.findViewById(R.id.itemImage);
@@ -89,6 +84,9 @@ public class BuildingAdapter extends ArrayAdapter<Building> {
         public Bitmap bitmap;
     }
 
+    //Asyntask specified in order to execute the function on different thread rather than waiting for the images to completely load and
+    // then display other details
+
     private class ImageLoader extends AsyncTask<BuildingAndView, Void, BuildingAndView> {
 
         @Override
@@ -96,7 +94,6 @@ public class BuildingAdapter extends ArrayAdapter<Building> {
 
             BuildingAndView container = params[0];
             Building building = container.building;
-
 
             try {
 

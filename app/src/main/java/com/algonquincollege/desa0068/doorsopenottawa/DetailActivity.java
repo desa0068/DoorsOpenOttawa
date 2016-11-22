@@ -14,6 +14,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.Locale;
+/**
+ * * This activity is responsible for displaying the details of the building and displaying the map and pin on it
+* Created by vaibhavidesai on 2016-11-04.*/
+
 
 public class DetailActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -43,7 +47,7 @@ public class DetailActivity extends FragmentActivity implements OnMapReadyCallba
             Address address = mGeoCoder.getFromLocationName(locationName, 1).get(0);
             LatLng ll = new LatLng( address.getLatitude(), address.getLongitude() );
             mMap.addMarker( new MarkerOptions().position(ll).title(locationName) );
-            mMap.animateCamera( CameraUpdateFactory.newLatLngZoom(ll,10.0f));
+            mMap.moveCamera( CameraUpdateFactory.newLatLngZoom(ll,12.0f));
 
             Toast.makeText(this, "Pinned: " + locationName, Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
@@ -61,7 +65,7 @@ public class DetailActivity extends FragmentActivity implements OnMapReadyCallba
         for (int i = 0; i < open_hours.size(); i++) {
             date += open_hours.get(i) + "\n";
         }
-        buildingOpenHours.setText("Open Hours:"+"\n"+date);
+        buildingOpenHours.setText(date);
 
     }
 

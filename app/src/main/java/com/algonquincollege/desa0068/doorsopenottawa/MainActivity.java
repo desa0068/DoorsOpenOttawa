@@ -1,7 +1,4 @@
-/*This class is used to create a asynctask which helps in getting the json data and placing it in the list adapter.
-It marks the starting point of the app
-@author Vaibhavi Desai (desa0068@algonquinlive.com)
-*/
+
 package com.algonquincollege.desa0068.doorsopenottawa;
 
 import android.app.ListActivity;
@@ -24,7 +21,13 @@ import com.algonquincollege.desa0068.doorsopenottawa.parsers.BuildingJSONParser;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ *  This activity checks for the presence of internet connection, if connection is available makes an http request to the specified url to retrieve
+ *  the list of buildings and its details via HttpManager and thereafter executing the BuildingJSONParser class by creating an AsyncTask.Finally,
+ *  sets the list of buildings and displays it. It also generates an intent on item click event so that details of the event are displayed in
+ *  another screen.
+ *  @author Vaibhavi Desai (desa0068@algonquinlive.com)
+ */
 public class MainActivity extends ListActivity implements AdapterView.OnItemClickListener{
 
     public static final String REST_URI = "https://doors-open-ottawa-hurdleg.mybluemix.net/buildings";
@@ -35,6 +38,8 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
     private Bundle b;
     private BuildingAdapter adapter;
     private ListView lv;
+    private String ABOUT_DIALOG_TAG;
+    private AboutDialogFragment dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +57,8 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
         }
         lv=getListView();
         lv.setOnItemClickListener(this);
-
-
+        ABOUT_DIALOG_TAG="About Dialog";
+        dialog=new AboutDialogFragment();
 
     }
 
@@ -65,14 +70,13 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_get_data) {
-            if (isOnline()) {
-                requestData(REST_URI);
-            } else {
-                Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG).show();
-            }
+        int id=item.getItemId();
+        if(id==R.id.action_info)
+        {
+            dialog.show(getFragmentManager(),ABOUT_DIALOG_TAG);
         }
-        return false;
+        return super.onOptionsItemSelected(item);
+
     }
 
     public void requestData(String uri) {
@@ -128,7 +132,6 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
         protected String doInBackground(String... params) {
             String content = HttpManager.getData(params[0]);
             buildingList = BuildingJSONParser.parseFeed(content);
-
             return content;
         }
 
@@ -138,11 +141,9 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
             if (tasks.size() == 0) {
                 pb.setVisibility(View.INVISIBLE);
             }
-
             if (s == null) {
                 Toast.makeText(MainActivity.this, "Could not retrieve data", Toast.LENGTH_LONG).show();
             }
-
             buildingList = BuildingJSONParser.parseFeed(s);
             updateDisplay();
 

@@ -20,6 +20,8 @@ public class BuildingJSONParser {
 
     public static List<Building> parseFeed(String content) {
         try {
+
+            //Retrieving JSON response and storing in it model class
             JSONObject jsonResponse = new JSONObject(content);
             JSONArray buildingArray = jsonResponse.getJSONArray("buildings");
             List<Building> listbuilding = new ArrayList<>();
@@ -34,11 +36,10 @@ public class BuildingJSONParser {
                 building.setDescription(obj.getString("description"));
                 building.setImage(obj.getString("image"));
                 JSONArray open_hours = obj.getJSONArray("open_hours");
-                List<String> list = new ArrayList<String>();
                 for (int j = 0; j < open_hours.length(); j++) {
-                    list.add(open_hours.getJSONObject(j).getString("date"));
+                    building.setOpen_hours((open_hours.getJSONObject(j).getString("date")));
                 }
-                building.setOpen_hours(list);
+
                 listbuilding.add(building);
             }
             return listbuilding;

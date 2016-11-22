@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,7 +19,7 @@ public class Building {
     private String name;
     private String address;
     private String image;
-    private List<String> open_hours;
+    private List<String> open_hours=new ArrayList<String>();
     private Bitmap bitmapimg;
 
     public String getDescription() {
@@ -56,10 +57,6 @@ public class Building {
         this.address = address + " Ottawa, Ontario";
     }
 
-    public String getImage() {
-        return image;
-    }
-
     public void setImage(String image) {
         this.image = image;
     }
@@ -68,8 +65,10 @@ public class Building {
         return open_hours;
     }
 
-    public void setOpen_hours(List<String> open_hours) {
-        this.open_hours = open_hours;
+    public void setOpen_hours(String date)
+    {
+
+        open_hours.add(date);
     }
 
     public void setBitmap(Bitmap bitmapimg) {

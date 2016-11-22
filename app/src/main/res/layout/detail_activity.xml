@@ -1,21 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     >
 
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/building_name_placeholder"-->
+        <!--android:id="@+id/lblbuildingname"-->
+        <!--android:textStyle="bold"-->
+        <!--android:textSize="17dp"-->
+        <!--android:paddingTop="@dimen/padding_text"-->
+        <!--android:paddingLeft="@dimen/padding_text"-->
+        <!--android:paddingRight="@dimen/padding_text"-->
+        <!--/>-->
     <TextView
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/building_name_placeholder"
-        android:id="@+id/lblbuildingname"
-        android:textStyle="bold"
-        android:textSize="17dp"/>
-    <TextView
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:id="@+id/buildingname"
-        android:layout_toRightOf="@+id/lblbuildingname"
-        android:paddingLeft="10dp">
+        android:textAlignment="center"
+        android:textSize="17dp"
+        android:textStyle="bold"
+        android:paddingLeft="@dimen/padding_text"
+        android:paddingTop="@dimen/padding_text">
     </TextView>
     <TextView
         android:layout_width="wrap_content"
@@ -23,32 +31,55 @@
         android:text="@string/building_description_placeholder"
         android:id="@+id/lblbuildingdescription"
         android:textStyle="bold"
-        android:layout_below="@+id/lblbuildingname"
-        android:textSize="17dp"/>
+        android:layout_below="@+id/buildingname"
+        android:textSize="17dp"
+        android:paddingTop="@dimen/padding_text"
+        android:paddingLeft="@dimen/padding_text"
+        android:paddingRight="@dimen/padding_text"/>
     <TextView
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:id="@+id/buildingdescription"
-        android:layout_below="@+id/lblbuildingdescription">
+        android:layout_below="@+id/lblbuildingdescription"
+        android:paddingLeft="@dimen/padding_text">
     </TextView>
     <TextView
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:id="@+id/lblbuildingaddress"
+        android:textStyle="bold"
+        android:textSize="17dp"
         android:text="@string/building_address_placeholder"
-        android:layout_below="@+id/buildingdescription">
+        android:layout_below="@+id/buildingdescription"
+        android:paddingTop="@dimen/padding_text"
+        android:paddingLeft="@dimen/padding_text"
+        android:paddingRight="@dimen/padding_text">
     </TextView>
     <TextView
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:id="@+id/buildingaddress"
-        android:layout_below="@+id/lblbuildingaddress">
+        android:layout_below="@+id/lblbuildingaddress"
+        android:paddingLeft="@dimen/padding_text">
+    </TextView>
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/lblOpenHours"
+        android:textSize="17dp"
+        android:textStyle="bold"
+        android:layout_below="@+id/buildingaddress"
+        android:paddingTop="@dimen/padding_text"
+        android:paddingLeft="@dimen/padding_text"
+        android:paddingRight="@dimen/padding_text"
+        android:text="@string/open_hours">
     </TextView>
     <TextView
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:id="@+id/openhours"
-        android:layout_below="@+id/buildingaddress">
+        android:layout_below="@+id/lblOpenHours"
+        android:paddingLeft="@dimen/padding_text">
     </TextView>
 
 
