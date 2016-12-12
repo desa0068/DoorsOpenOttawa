@@ -9,4 +9,25 @@
     <string name="name">Vaibhavi Desai (desa0068)</string>
     <string name="ok">OK</string>
     <string name="open_hours">Open Hours:</string>
+    <string name="add_name">Enter Name</string>
+    <string name="btnadd">Add</string>
+    <string name="btncancel">Cancel</string>
+    <string name="add_address">Enter address</string>
+    <string name="add_description">Add Description</string>
+    <string name="delete_building_name_placeholder">Enter name of the building you want to delete</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="menu_edit">Edit</string>
+    <string name="menu_delete">Delete</string>
+    <string name="sortascending">Sort Buildings (A-Z)</string>
+    <string name="sortdesc">Sort Buildings (Z-A)</string>
+    <string name="searchbuilding">Search Building</string>
+    <string name="details">Invoke Detail Fragment</string>
+    <string name="edit">Invoke Edit Fragment</string>
+    <string name="editdata">Edit</string>
+    <string name="favourites">Add To Favourites</string>
+
 </resources>

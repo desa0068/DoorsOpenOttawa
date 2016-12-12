@@ -4,10 +4,19 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
+
+import com.algonquincollege.desa0068.doorsopenottawa.utils.CustomTask;
+import com.algonquincollege.desa0068.doorsopenottawa.utils.HttpMethod;
+import com.algonquincollege.desa0068.doorsopenottawa.utils.RequestPackage;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -28,30 +37,37 @@ import java.util.Locale;
 * Created by vaibhavidesai on 2016-11-04.*/
 
 
-public class DetailActivity extends FragmentActivity implements OnMapReadyCallback {
+public class DetailActivity extends Fragment implements OnMapReadyCallback {
 
     private TextView buildingName,buildingDescription,buildingAddress,buildingOpenHours;
     Bundle b;
     private GoogleMap mMap;
     private Geocoder mGeoCoder;
     private String url="https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=AIzaSyDljwyAhRkGAPhYd-IB_rFGsurxHNojjQU";
+    SupportMapFragment mapFragment;
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.detail_activity, container, false);
+        buildingName=(TextView)view.findViewById(R.id.buildingname);
+        buildingDescription=(TextView)view.findViewById(R.id.buildingdescription);
+        buildingAddress=(TextView)view.findViewById(R.id.buildingaddress);
+        buildingOpenHours=(TextView)view.findViewById(R.id.openhours);
+        mapFragment= (SupportMapFragment)getChildFragmentManager().findFragmentById(R.id.map);
+
+        b=getArguments();
+        loadData();
+        return view;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.detail_activity);
-
-        buildingName=(TextView)findViewById(R.id.buildingname);
-        buildingDescription=(TextView)findViewById(R.id.buildingdescription);
-        buildingAddress=(TextView)findViewById(R.id.buildingaddress);
-        buildingOpenHours=(TextView)findViewById(R.id.openhours);
-        b=getIntent().getExtras();
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         mapFragment.getMapAsync(this);
-        mGeoCoder=new Geocoder(this, Locale.CANADA);
-        loadData();
+        mGeoCoder = new Geocoder(this.getActivity(), Locale.CANADA);
+
     }
+
     private void pin(String locationName)
     {
 
@@ -60,8 +76,11 @@ public class DetailActivity extends FragmentActivity implements OnMapReadyCallba
             if(address.size()==0)
             {
                 String requesturl = String.format(url, URLEncoder.encode(String.valueOf(locationName), "UTF-8"));
+                RequestPackage pkg = new RequestPackage();
+                pkg.setMethod( HttpMethod.GET );
+                pkg.setUri(requesturl);
                 Log.e("TAG",requesturl);
-                new LocalGeoCoder().execute(requesturl);
+                new LocalGeoCoder().execute(pkg);
             }
             else {
                  LatLng ll=new LatLng(address.get(0).getLatitude(), address.get(0).getLongitude());
@@ -69,7 +88,7 @@ public class DetailActivity extends FragmentActivity implements OnMapReadyCallba
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ll, 12.0f));
 
             }
-            Toast.makeText(this, "Pinned: " + locationName, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this.getActivity(), "Pinned: " + locationName, Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
 
         }
@@ -98,11 +117,11 @@ public class DetailActivity extends FragmentActivity implements OnMapReadyCallba
         pin(b.getString("building_address"));
     }
 
-    private class LocalGeoCoder extends AsyncTask<String, Void, LatLng> {
+    private class LocalGeoCoder extends AsyncTask<RequestPackage, Void, LatLng> {
 
         @Override
-        protected LatLng doInBackground(String... params) {
-           String content = HttpManager.getData(params[0]);
+        protected LatLng doInBackground(RequestPackage... params) {
+           String content = HttpManager.crugOperation(params[0],"desa0068","password");
             JSONObject jsonObject;
             try {
                 jsonObject = new JSONObject(content);
@@ -120,7 +139,7 @@ public class DetailActivity extends FragmentActivity implements OnMapReadyCallba
         protected void onPostExecute(LatLng latLng) {
             super.onPostExecute(latLng);
             if (latLng == null) {
-                Toast.makeText(getApplicationContext(), "LatLong not found", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity().getApplicationContext(), "LatLong not found", Toast.LENGTH_SHORT).show();
                 } else {
                 putPinonMap(latLng);
                 }

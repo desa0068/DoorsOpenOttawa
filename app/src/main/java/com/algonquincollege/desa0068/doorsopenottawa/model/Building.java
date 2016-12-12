@@ -15,9 +15,31 @@ import java.util.List;
 public class Building {
 
     private static DateFormat DATE_FORMAT = new SimpleDateFormat("EEE,MMM,d,yyyy - hh:mm");
-    private int buildingId;
+    private Integer buildingId;
     private String name;
     private String address;
+
+    public boolean isAddedToFavourites() {
+        return isAddedToFavourites;
+    }
+
+    public void setAddedToFavourites(boolean addedToFavourites) {
+        isAddedToFavourites = addedToFavourites;
+    }
+
+    private boolean isAddedToFavourites;
+    public Building()
+    {
+
+    }
+    public Building(String name)
+    {
+        this.name=name;
+    }
+    public String getImage() {
+        return image;
+    }
+
     private String image;
     private List<String> open_hours=new ArrayList<String>();
     private Bitmap bitmapimg;
@@ -33,7 +55,7 @@ public class Building {
     private String description;
 
 
-    public int getBuildingId() {
+    public Integer getBuildingId() {
         return buildingId;
     }
 
@@ -54,7 +76,7 @@ public class Building {
     }
 
     public void setAddress(String address) {
-        this.address = address + " Ottawa, Ontario";
+        this.address = address;
     }
 
     public void setImage(String image) {

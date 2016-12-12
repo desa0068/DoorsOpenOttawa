@@ -1,26 +1,18 @@
 
 package com.algonquincollege.desa0068.doorsopenottawa;
 
-import android.app.ListActivity;
-import android.content.Context;
-import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.AsyncTask;
+
+
 import android.os.Bundle;
+
+import android.support.v7.app.AppCompatActivity;
+
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
-import com.algonquincollege.desa0068.doorsopenottawa.model.Building;
-import com.algonquincollege.desa0068.doorsopenottawa.parsers.BuildingJSONParser;
+import com.algonquincollege.desa0068.doorsopenottawa.crug.EditBuilding;
+import com.algonquincollege.desa0068.doorsopenottawa.crug.NewBuildingActivity;
 
-import java.util.ArrayList;
-import java.util.List;
 /**
  *  This activity checks for the presence of internet connection, if connection is available makes an http request to the specified url to retrieve
  *  the list of buildings and its details via HttpManager and thereafter executing the BuildingJSONParser class by creating an AsyncTask.Finally,
@@ -28,38 +20,22 @@ import java.util.List;
  *  another screen.
  *  @author Vaibhavi Desai (desa0068@algonquinlive.com)
  */
-public class MainActivity extends ListActivity implements AdapterView.OnItemClickListener{
+public class MainActivity extends AppCompatActivity implements  DataPassListener{
 
     public static final String REST_URI = "https://doors-open-ottawa-hurdleg.mybluemix.net/buildings";
+    public static final String IMAGE_URI = "https://doors-open-ottawa-hurdleg.mybluemix.net/";
 
-    private ProgressBar pb;
-    private List<MyTask> tasks;
-    private List<Building> buildingList;
-    private Bundle b;
-    private BuildingAdapter adapter;
-    private ListView lv;
-    private String ABOUT_DIALOG_TAG;
-    private AboutDialogFragment dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        pb = (ProgressBar) findViewById(R.id.progressBar);
-        pb.setVisibility(View.INVISIBLE);
+        if(savedInstanceState==null) {
+            ListBuilding listBuilding = new ListBuilding();
+            getSupportFragmentManager().beginTransaction().replace(R.id.container,listBuilding).commit();
 
-        tasks = new ArrayList<>();
-        if (isOnline()) {
-            requestData(REST_URI);
-        } else {
-            Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG).show();
         }
-        lv=getListView();
-        lv.setOnItemClickListener(this);
-        ABOUT_DIALOG_TAG="About Dialog";
-        dialog=new AboutDialogFragment();
-
     }
 
     @Override
@@ -71,82 +47,29 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id=item.getItemId();
-        if(id==R.id.action_info)
+        if(id==R.id.add)
         {
-            dialog.show(getFragmentManager(),ABOUT_DIALOG_TAG);
+            NewBuildingActivity addBuildingFragment=new NewBuildingActivity();
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, addBuildingFragment).addToBackStack(null).commit();
         }
         return super.onOptionsItemSelected(item);
-
-    }
-
-    public void requestData(String uri) {
-        MyTask task = new MyTask();
-        task.execute(uri);
-    }
-
-
-    public void updateDisplay() {
-        adapter= new BuildingAdapter(this, R.layout.item_building, buildingList);
-        setListAdapter(adapter);
-
-
-    }
-
-    public boolean isOnline() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Building building=buildingList.get(position);
-        Intent intent = new Intent(MainActivity.this, DetailActivity.class);
-        b=new Bundle();
-        b.putInt("building_id",building.getBuildingId());
-        b.putString("building_name",building.getName());
-        b.putString("building_address",building.getAddress());
-        b.putString("building_description",building.getDescription());
-        ArrayList<String> open_hours= (ArrayList<String>) building.getOpen_hours();
-        b.putStringArrayList("open_hours",open_hours);
-        intent.putExtras(b);
-        startActivity(intent);
+    public void passData(Bundle b,String message) {
+        if(message.equals(getResources().getString(R.string.details))) {
+            DetailActivity detailFragment = new DetailActivity();
+            detailFragment.setArguments(b);
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, detailFragment).addToBackStack(null).commit();
+        }
+        else if(message.equals(getResources().getString(R.string.edit)))
+        {
+            EditBuilding editFragment = new EditBuilding();
+            editFragment.setArguments(b);
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, editFragment).addToBackStack(null).commit();
+        }
+
 
     }
 
-    private class MyTask extends AsyncTask<String, String, String> {
-
-        @Override
-        protected void onPreExecute() {
-            if (tasks.size() == 0) {
-                pb.setVisibility(View.VISIBLE);
-            }
-            tasks.add(this);
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            String content = HttpManager.getData(params[0]);
-            buildingList = BuildingJSONParser.parseFeed(content);
-            return content;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            tasks.remove(this);
-            if (tasks.size() == 0) {
-                pb.setVisibility(View.INVISIBLE);
-            }
-            if (s == null) {
-                Toast.makeText(MainActivity.this, "Could not retrieve data", Toast.LENGTH_LONG).show();
-            }
-            buildingList = BuildingJSONParser.parseFeed(s);
-            updateDisplay();
-
-        }
-    }
 }
