@@ -2,39 +2,50 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.algonquincollege.desa0068.doorsopenottawa.crug.EditBuilding">
+    tools:context="com.algonquincollege.desa0068.doorsopenottawa.crug.EditBuilding"
+    android:background="#DEB887">
 
     <!-- TODO: Update blank fragment layout -->
    <EditText
-       android:layout_width="wrap_content"
+       android:layout_width="match_parent"
        android:layout_height="wrap_content"
        android:id="@+id/displayName"
        android:text="Name"/>
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/editAddress"
         android:layout_below="@+id/displayName"
         android:text="Address"/>
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/editDescription"
         android:layout_below="@+id/editAddress"
         android:text="Description"/>
-    <Button
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/editDescription"
+        android:layout_marginTop="5dp"
+        >
+    <Button
+        android:layout_width="0.0dip"
+        android:layout_height="fill_parent"
+        android:layout_weight="1.0"
         android:id="@+id/editData"
-        android:layout_below="@+id/editDescription"
-        android:text="@string/editdata"/>
+        android:text="@string/editdata"
+        android:background="@drawable/border"
+        android:layout_marginRight="5dp"/>
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0.0dip"
+        android:layout_height="fill_parent"
+        android:layout_weight="1.0"
         android:id="@+id/cancelEdit"
-        android:layout_below="@+id/editDescription"
-        android:layout_toRightOf="@+id/editData"
-        android:text="@string/cancel"/>
+        android:text="@string/cancel"
+        android:background="@drawable/border"/>
+    </LinearLayout>
 
 
 

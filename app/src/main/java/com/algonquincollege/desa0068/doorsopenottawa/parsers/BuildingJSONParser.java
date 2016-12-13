@@ -1,7 +1,5 @@
 package com.algonquincollege.desa0068.doorsopenottawa.parsers;
 
-import android.os.Build;
-
 import com.algonquincollege.desa0068.doorsopenottawa.model.Building;
 
 import org.json.JSONArray;
@@ -39,7 +37,7 @@ public class BuildingJSONParser {
                 building.setImage(obj.getString("image"));
                 JSONArray open_hours = obj.getJSONArray("open_hours");
                 for (int j = 0; j < open_hours.length(); j++) {
-                        building.setOpen_hours((open_hours.getJSONObject(j).getString("date")));
+                    building.setOpen_hours((open_hours.getJSONObject(j).getString("date")));
                 }
 
                 listbuilding.add(building);
@@ -63,9 +61,7 @@ public class BuildingJSONParser {
             building.setDescription(jsonResponse.getString("description"));
             building.setImage(jsonResponse.getString("image"));
             return building;
-        }
-        catch(JSONException e)
-        {
+        } catch (JSONException e) {
             return null;
         }
 

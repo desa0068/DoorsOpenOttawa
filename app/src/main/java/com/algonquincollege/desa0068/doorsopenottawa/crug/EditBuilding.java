@@ -2,6 +2,7 @@ package com.algonquincollege.desa0068.doorsopenottawa.crug;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.algonquincollege.desa0068.doorsopenottawa.DataPassListener;
 import com.algonquincollege.desa0068.doorsopenottawa.MainActivity;
 import com.algonquincollege.desa0068.doorsopenottawa.R;
 import com.algonquincollege.desa0068.doorsopenottawa.model.Building;
@@ -36,10 +38,12 @@ public class EditBuilding extends Fragment implements View.OnClickListener, Cust
     private OnFragmentInteractionListener mListener;
     private Bundle b;
     private EditText mName, mAddress, mDescription;
-    private String name,address, description;
+    private String name, address, description;
     private Button btnEdit, btnCancel;
     private Building mBuilding;
     private int id;
+    private CustomTask putTask;
+    private DataPassListener mCallback;
     public EditBuilding() {
         // Required empty public constructor
     }
@@ -49,7 +53,6 @@ public class EditBuilding extends Fragment implements View.OnClickListener, Cust
      * this fragment using the provided parameters.
      *
      * @param param1 Parameter 1.
-     *
      * @return A new instance of fragment EditBuilding.
      */
     // TODO: Rename and change types and number of parameters
@@ -74,19 +77,20 @@ public class EditBuilding extends Fragment implements View.OnClickListener, Cust
         // Inflate the layout for this
         View view = inflater.inflate(R.layout.fragment_edit_building, container, false);
         b = getArguments();
-        name=b.getString("building_name");
+        name = b.getString("building_name");
         address = b.getString("building_address");
         description = b.getString("building_description");
-        id=b.getInt("building_id");
+        id = b.getInt("building_id");
         mName = (EditText) view.findViewById(R.id.displayName);
         mAddress = (EditText) view.findViewById(R.id.editAddress);
         mDescription = (EditText) view.findViewById(R.id.editDescription);
         btnEdit = (Button) view.findViewById(R.id.editData);
         btnCancel = (Button) view.findViewById(R.id.cancelEdit);
         btnEdit.setOnClickListener(this);
+        btnCancel.setOnClickListener(this);
         mName.setText(name);
 
-        mBuilding=new Building();
+        mBuilding = new Building();
 
         return view;
     }
@@ -110,12 +114,12 @@ public class EditBuilding extends Fragment implements View.OnClickListener, Cust
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
+        try {
+            mCallback = (DataPassListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement DataPassListener");
+        }
     }
 
     @Override
@@ -126,6 +130,7 @@ public class EditBuilding extends Fragment implements View.OnClickListener, Cust
 
     @Override
     public void onClick(View v) {
+        if(v.getId()==R.id.editData) {
             mBuilding.setAddress(mAddress.getText().toString());
             mBuilding.setDescription(mDescription.getText().toString());
             RequestPackage pkg = new RequestPackage();
@@ -133,18 +138,26 @@ public class EditBuilding extends Fragment implements View.OnClickListener, Cust
             pkg.setUri(MainActivity.REST_URI + "/" + id);
             pkg.setParam("address", mBuilding.getAddress());
             pkg.setParam("description", mBuilding.getDescription());
-            CustomTask putTask = new CustomTask(this);
+            putTask = new CustomTask(this);
             putTask.execute(pkg);
+        }
+        else if(v.getId()==R.id.cancelEdit)
+        {
+            mCallback.passData(null, getResources().getString(R.string.list));
+        }
 
 
     }
 
 
     @Override
-    public void processFinish(String output,String method) {
-        if(output!=null) {
-            Toast.makeText(this.getActivity(), mName.getText().toString()  + " is updated successfully",Toast.LENGTH_SHORT).show();
+    public void processFinish(String output, String method) {
+        if (output != null) {
+            Toast.makeText(this.getActivity(), mName.getText().toString() + " is updated successfully", Toast.LENGTH_SHORT).show();
         }
+            // My AsyncTask is done and onPostExecute was called
+            mCallback.passData(null, getResources().getString(R.string.list));
+
     }
 
     /**

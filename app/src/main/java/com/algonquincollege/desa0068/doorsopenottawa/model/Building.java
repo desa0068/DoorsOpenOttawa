@@ -18,6 +18,19 @@ public class Building {
     private Integer buildingId;
     private String name;
     private String address;
+    private boolean isAddedToFavourites;
+    private String image;
+    private List<String> open_hours = new ArrayList<String>();
+    private Bitmap bitmapimg;
+    private String description;
+
+    public Building() {
+
+    }
+
+    public Building(String name) {
+        this.name = name;
+    }
 
     public boolean isAddedToFavourites() {
         return isAddedToFavourites;
@@ -27,22 +40,13 @@ public class Building {
         isAddedToFavourites = addedToFavourites;
     }
 
-    private boolean isAddedToFavourites;
-    public Building()
-    {
-
-    }
-    public Building(String name)
-    {
-        this.name=name;
-    }
     public String getImage() {
         return image;
     }
 
-    private String image;
-    private List<String> open_hours=new ArrayList<String>();
-    private Bitmap bitmapimg;
+    public void setImage(String image) {
+        this.image = image;
+    }
 
     public String getDescription() {
         return description;
@@ -51,9 +55,6 @@ public class Building {
     public void setDescription(String description) {
         this.description = description;
     }
-
-    private String description;
-
 
     public Integer getBuildingId() {
         return buildingId;
@@ -79,16 +80,11 @@ public class Building {
         this.address = address;
     }
 
-    public void setImage(String image) {
-        this.image = image;
-    }
-
     public List<String> getOpen_hours() {
         return open_hours;
     }
 
-    public void setOpen_hours(String date)
-    {
+    public void setOpen_hours(String date) {
 
         open_hours.add(date);
     }

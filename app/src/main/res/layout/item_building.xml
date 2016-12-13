@@ -14,9 +14,7 @@
         android:layout_height="200dp"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-
-
-        android:clickable="false"/>
+        />
     <TextView
         android:id="@+id/itemname"
         android:layout_width="match_parent"
@@ -28,7 +26,7 @@
         style="@android:style/TextAppearance.Material.Title"
         android:textStyle="bold"
 
-        android:clickable="false"/>
+        />
     <TextView
         android:id="@+id/itemdescription"
         android:layout_width="match_parent"
@@ -38,19 +36,22 @@
         style="@android:style/TextAppearance.Material.Body1"
         android:paddingTop="20dp"
         android:textColor="@android:color/black"
-        android:focusable="false"
+
         android:textStyle="bold"
 
-        android:clickable="false"/>
+        />
 
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="100dp"
-        android:background="@drawable/addtofavourites"
+        android:button="@null"
+        android:background="@drawable/selector"
         android:id="@+id/favourites"
+        android:checked="false"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:clickable="true"/>
+
+        />
 
 </RelativeLayout>

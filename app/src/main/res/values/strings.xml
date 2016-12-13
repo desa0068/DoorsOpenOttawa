@@ -29,5 +29,8 @@
     <string name="edit">Invoke Edit Fragment</string>
     <string name="editdata">Edit</string>
     <string name="favourites">Add To Favourites</string>
+    <string name="list">List Building</string>
+    <string name="confirmdelete">Are you sure to delete this record?</string>
+    <string name="deletedata">Delete Record</string>
 
 </resources>

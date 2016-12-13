@@ -27,10 +27,17 @@ public class CustomTask extends AsyncTask<RequestPackage, String,String> {
 
     @Override
     protected String doInBackground(RequestPackage... params) {
-            method=params[0].getMethod().toString();
-            String content = HttpManager.crugOperation(params[0],"desa0068", "password");
-            return content;
-
+        String content;
+            if(params[0].isImage())
+            {
+              content=HttpManager.uploadFile(params[0]);
+              return content;
+            }
+        else {
+                method = params[0].getMethod().toString();
+                content = HttpManager.crugOperation(params[0], "desa0068", "password");
+                return content;
+            }
     }
 
     @Override

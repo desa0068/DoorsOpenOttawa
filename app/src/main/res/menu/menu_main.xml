@@ -5,6 +5,11 @@
         android:orderInCategory="0"
         app:showAsAction="always"
         android:icon="@android:drawable/ic_menu_add" />
+    <item
+        android:id="@+id/about"
+        android:orderInCategory="0"
+        app:showAsAction="always"
+        android:icon="@android:drawable/ic_menu_info_details" />
     <group android:id="@+id/sort_options" android:checkableBehavior="single">
         <item android:id="@+id/sortasc"
             android:title="@string/sortascending"

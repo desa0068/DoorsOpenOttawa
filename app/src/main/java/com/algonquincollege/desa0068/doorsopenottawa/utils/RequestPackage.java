@@ -1,5 +1,7 @@
 package com.algonquincollege.desa0068.doorsopenottawa.utils;
 
+import android.graphics.Bitmap;
+
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -14,7 +16,9 @@ public class RequestPackage {
     private String uri;
     private HttpMethod method = HttpMethod.GET;
     private Map<String, String> params = new HashMap<>();
+    private Map<String, File> imageParams = new HashMap<>();
     private Map<String, File> paramsImage = new HashMap<>();
+    private boolean isImage;
 
     public String getUri() {
         return uri;
@@ -35,11 +39,32 @@ public class RequestPackage {
         this.params = params;
     }
 
+    public Integer getBuildingId()
+    {
+        return Integer.parseInt(params.get("id"));
+    }
     public void setParam(String key, String value) {
         params.put(key, value);
     }
 
+    public void setImageParams(String key,File bm)
+    {
+        imageParams.put(key,bm);
+    }
+    public void setIsImage(boolean isImage)
+    {
+        this.isImage=isImage;
+    }
 
+    public boolean isImage()
+    {
+        return isImage;
+    }
+
+    public File getImage()
+    {
+        return imageParams.get("image");
+    }
     public String getEncodedParams() {
         StringBuilder sb = new StringBuilder();
         for (String key : params.keySet()) {

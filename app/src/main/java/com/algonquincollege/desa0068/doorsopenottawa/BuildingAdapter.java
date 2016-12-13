@@ -1,18 +1,23 @@
 package com.algonquincollege.desa0068.doorsopenottawa;
 
-import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.util.LruCache;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
@@ -20,6 +25,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.algonquincollege.desa0068.doorsopenottawa.model.Building;
+import com.algonquincollege.desa0068.doorsopenottawa.utils.CustomTask;
+import com.algonquincollege.desa0068.doorsopenottawa.utils.HttpMethod;
+import com.algonquincollege.desa0068.doorsopenottawa.utils.RequestPackage;
 import com.algonquincollege.desa0068.doorsopenottawa.utils.SharedPreference;
 
 import java.io.InputStream;
@@ -35,120 +43,132 @@ import java.util.Locale;
  * Created by vaibhavidesai on 2016-11-04.
  */
 
-public class BuildingAdapter extends ArrayAdapter<Building> implements Filterable,View.OnClickListener {
+public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.BuildingViewHolder> implements Filterable, View.OnClickListener, View.OnCreateContextMenuListener {
 
-    private final ArrayList<Building> arraylist;
+    private final DataPassListener mCallback;
+    List<Boolean> newArray;
+    ArrayList<Boolean> positionArray;
+    SharedPreference sp=new SharedPreference();
+
+    View row;
+    private ArrayList<Building> arraylist;
     private Context context;
     private List<Building> buildingList;
-    private TextView buildingId, buildingName, buildingDescription;
     private LruCache<Integer, Bitmap> imageCache;
-    private ArrayList<Building> mOriginalValues; // Original Values
-    private ArrayList<Building> mDisplayedValues;    // Values to be displayed
-    LayoutInflater inflater;
-    List<Boolean> newArray;
-    private ImageView addToFavourites;
-    private boolean isFavorite=false;
-    private SharedPreference sp;
+    private boolean isFavorite = false;
+    private View view;
+     Building building;
 
 
-    public BuildingAdapter(Context context, int resource, List<Building> building) {
-        super(context, resource, building);
-        this.context = context;
-        this.buildingList = building;
-
-        //Specifying the cache memory size
-        final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-        final int cacheSize = maxMemory / 8;
-        newArray=new ArrayList<>();
+    public BuildingAdapter(List<Building> buildingList, Context context) {
+        this.buildingList = buildingList;
+        newArray = new ArrayList<>();
+        arraylist=new ArrayList<>();
         for(Building b:buildingList)
         {
-            b.setAddedToFavourites(false);
+            arraylist.add(b);
         }
+        final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+        final int cacheSize = maxMemory / 8;
         imageCache = new LruCache<>(cacheSize);
-        arraylist = new ArrayList<Building>();
-        arraylist.addAll(buildingList);
-        sp=new SharedPreference();
+
+        this.context = context;
+        mCallback = (DataPassListener) context;
+
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater =
-                (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.item_building, parent, false);
-        Building building = buildingList.get(position);
-        buildingName = (TextView) view.findViewById(R.id.itemname);
-        buildingName.setText(building.getName());
-        buildingDescription = (TextView)view.findViewById(R.id.itemdescription);
-        buildingDescription.setText(building.getDescription());
-        addToFavourites=(ImageView)view.findViewById(R.id.favourites);
-        Bitmap bitmap = imageCache.get(building.getBuildingId());
-        addToFavourites.bringToFront();
+    public Filter getFilter() {
+        return null;
+    }
 
-        if(checkFavoriteItem(building.getBuildingId().toString())){
-            addToFavourites.setBackgroundResource(R.drawable.starfilled);
-            notifyDataSetChanged();
-            isFavorite=true;
-        }
-        else
-        {
-            addToFavourites.setBackgroundResource(R.drawable.addtofavourites);
-            notifyDataSetChanged();
-            isFavorite=false;
-        }
+    @Override
+    public void onBindViewHolder(final BuildingViewHolder holder, final int position) {
+        building= buildingList.get(position);
+        holder.bitmap = imageCache.get(building.getBuildingId());
+        holder.buildingName.setText(building.getName());
+        holder.buildingDescription.setText(building.getDescription());
 
-        addToFavourites.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if(isFavorite==false)
-                {
-                    isFavorite=true;
-                    sp.addFavorite(context, buildingList.get(position).getBuildingId().toString());
-                    addToFavourites.setBackgroundResource(R.drawable.starfilled);
-                    Toast.makeText(getContext(),"Added To Favourites",Toast.LENGTH_SHORT).show();
-                    notifyDataSetChanged();
-                }
-                else
-                {
-                    isFavorite=false;
-                    sp.removeFavorite(context, buildingList.get(position).getBuildingId().toString());
-                    addToFavourites.setBackgroundResource(R.drawable.addtofavourites);
-                    Toast.makeText(getContext(),"Removed from Favourites",Toast.LENGTH_SHORT).show();
-                    notifyDataSetChanged();
-
-                }
-            }
-
-
-
-
-
-        });
-
-        //Loads the image from cache
-        if (bitmap != null) {
-
-            ImageView image = (ImageView) view.findViewById(R.id.itemImage);
-            image.setImageBitmap(building.getBitmapimg());
+        if (holder.bitmap != null) {
+            holder.image.setImageBitmap(building.getBitmapimg());
         } else {
 
             BuildingAndView container = new BuildingAndView();
             container.building = building;
-            container.view = view;
-//
+            container.view = holder.itemView;
             ImageLoader loader = new ImageLoader();
             loader.execute(container);
         }
 
+        holder.itemView.setOnCreateContextMenuListener(this);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.b = new Bundle();
+                holder.b.putInt("building_id", building.getBuildingId());
+                holder.b.putString("building_name", building.getName());
+                holder.b.putString("building_address", building.getAddress());
+                holder.b.putString("building_description", building.getDescription());
+                ArrayList<String> open_hours = (ArrayList<String>) building.getOpen_hours();
+                holder.b.putStringArrayList("open_hours", open_hours);
+                mCallback.passData(holder.b, "Invoke Detail Fragment");
+            }
+        });
 
 
+        holder.addToFavourites.setOnClickListener(new View.OnClickListener() {
+                                                      @Override
+                                                      public void onClick(View v) {
+                                                          String tag = holder.addToFavourites.getTag().toString();
+                                                          if (tag.equalsIgnoreCase("no")) {
 
-        return view;
+                                                              MainActivity.sp.addFavorite(context, buildingList.get(position).getBuildingId().toString());
+                                                              holder.addToFavourites.setTag("yes");
+                                                              Toast.makeText(context, "Added to favourites", Toast.LENGTH_SHORT).show();
+
+
+                                                          } else if (tag.equalsIgnoreCase("yes")) {
+
+                                                              MainActivity.sp.removeFavorite(context, buildingList.get(position).getBuildingId().toString());
+                                                              holder.addToFavourites.setTag("no");
+                                                              holder.addToFavourites.setButtonDrawable(R.drawable.addtofavourites);
+                                                              Toast.makeText(context, "Removed from favourites", Toast.LENGTH_SHORT).show();
+                                                          }
+
+                                                      }
+                                                  });
+
+
+//        holder.addToFavourites.setChecked(building.isAddedToFavourites());
+        if (checkFavoriteItem(building.getBuildingId().toString())) {
+            holder.addToFavourites.setTag("yes");
+            holder.addToFavourites.invalidate();
+            holder.addToFavourites.setChecked(true);
+        } else {
+            holder.addToFavourites.invalidate();
+            holder.addToFavourites.setTag("no");
+            holder.addToFavourites.setChecked(false);
+
+        }
 
     }
+
+    @Override
+    public int getItemCount() {
+        return buildingList.size();
+    }
+
+    @Override
+    public BuildingViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_building, parent, false);
+
+        return new BuildingViewHolder(itemView);
+    }
+
     public boolean checkFavoriteItem(String buildingId) {
         boolean check = false;
-
+        if (sp != null) {
             List<String> favorites = sp.getFavorites(context);
             if (favorites != null) {
                 for (String code : favorites) {
@@ -158,27 +178,28 @@ public class BuildingAdapter extends ArrayAdapter<Building> implements Filterabl
                     }
                 }
             }
+        }
 
         return check;
     }
 
     // Filter Class
+
     public void filter(String charText) {
         charText = charText.toLowerCase(Locale.getDefault());
         buildingList.clear();
-        if (charText.length() == 0) {
-            buildingList.addAll(arraylist);
-        }
-        else
-        {
-            for (Building b : arraylist)
-            {
-                if (b.getName().toLowerCase(Locale.getDefault()).contains(charText))
-                {
-                    buildingList.add(b);
-                }
-            }
-        }
+       if(arraylist!=null) {
+           if (charText.length() == 0) {
+               buildingList.addAll(arraylist);
+           } else {
+               for (Building b : arraylist) {
+                   if (b.getName().toLowerCase(Locale.getDefault()).contains(charText)) {
+                       buildingList.add(b);
+                   }
+               }
+           }
+       }
+
         notifyDataSetChanged();
     }
 
@@ -186,13 +207,42 @@ public class BuildingAdapter extends ArrayAdapter<Building> implements Filterabl
     public void onClick(View v) {
 
 
+    }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        menu.add(0, R.id.edit, 0, "Edit");
+        menu.add(0, R.id.delete, 1, "Delete");
+
+    }
+
+
+
+
+
+    public class BuildingViewHolder extends RecyclerView.ViewHolder {
+        public TextView buildingName, buildingDescription;
+        public ImageView image;
+        public CheckBox addToFavourites;
+        public Bitmap bitmap;
+        public Bundle b;
+
+
+        public BuildingViewHolder(View view) {
+            super(view);
+            buildingName = (TextView) view.findViewById(R.id.itemname);
+            buildingDescription = (TextView) view.findViewById(R.id.itemdescription);
+            addToFavourites = (CheckBox) view.findViewById(R.id.favourites);
+            image = (ImageView) view.findViewById(R.id.itemImage);
+
+        }
     }
 
     private class BuildingAndView {
         public Building building;
         public View view;
         public Bitmap bitmap;
+
     }
 
     //Asyntask specified in order to execute the function on different thread rather than waiting for the images to completely load and
@@ -231,17 +281,17 @@ public class BuildingAdapter extends ArrayAdapter<Building> implements Filterabl
 
         @Override
         protected void onPostExecute(BuildingAndView result) {
-            if(result !=null) {
+            if (result != null) {
+
                 ImageView image = (ImageView) result.view.findViewById(R.id.itemImage);
                 image.setImageBitmap(result.bitmap);
-                if(result.building.getBuildingId()!=null && result.bitmap!=null) {
+                if (result.building.getBuildingId() != null && result.bitmap != null) {
                     imageCache.put(result.building.getBuildingId(), result.bitmap);
                 }
             }
         }
 
     }
-
 
 
 }

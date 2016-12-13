@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#DEB887">
 
         <EditText
             android:id="@+id/building_name"
@@ -22,32 +23,60 @@
 
         <ImageView
             android:id="@+id/building_image"
-            android:layout_width="150dp"
+            android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_below="@+id/building_address"
             android:imeOptions="actionDone"
             android:maxLines="1"
-            android:singleLine="true" />
+            android:background="@drawable/border"
+            android:singleLine="true"
+            />
+
         <EditText
             android:id="@+id/building_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/add_description"
-            android:layout_below="@+id/building_image"
+            android:layout_below="@+id/pick_image"
             android:imeOptions="actionDone"
             android:maxLines="1"
             android:singleLine="true" />
 
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/building_description"
+        android:layout_marginTop="5dp"
+        >
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0"
             android:text="@string/btnadd"
             android:id="@+id/btnadd"
-            android:layout_below="@+id/building_description"/>
+            android:background="@drawable/border"
+            android:layout_marginRight="5dp"
+            />
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0"
             android:text="@string/btncancel"
             android:layout_toRightOf="@+id/btnadd"
-            android:layout_below="@+id/building_description"/>
+            android:background="@drawable/border"
+            android:id="@+id/btncancel"
+
+            />
+    </LinearLayout>
+
+        <Button
+            android:layout_marginTop="20dp"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="Select Image"
+           android:background="@drawable/border"
+            android:id="@+id/pick_image"
+            android:layout_below="@+id/building_image"
+            android:layout_centerHorizontal="true" />
 </RelativeLayout>

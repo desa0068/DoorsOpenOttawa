@@ -13,10 +13,10 @@
         android:layout_below="@+id/inputSearch">
 
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:choiceMode="singleChoice"
-        android:id="@android:id/list"
+        android:id="@+id/listView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></ListView>
+        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
     </android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>
