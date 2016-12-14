@@ -13,10 +13,10 @@ FR # 4 Upload Image
   
 FR# 5 Delete Building 
     Status : Complete
-    UI does not get updated
+    UI does not get updated without reopening the app
     
 FR# 6 Favorite Building
-  Status : Building is added to favorites and removed from Set<String> array and preferences but the icon does not get changed
+  Status : Building is added to favorites and removed from Set<String> array and preferences but the icons does not get changed
   
 FR#7 Sort Building Alphabetically 
   Status : Done
