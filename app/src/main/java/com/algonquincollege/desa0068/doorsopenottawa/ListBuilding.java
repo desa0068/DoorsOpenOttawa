@@ -242,11 +242,12 @@ public class ListBuilding extends android.support.v4.app.Fragment implements Swi
 //        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 //        int index = info.position;
         int index = item.getOrder();
+        Building building = mBuildingList.get(index);
 
         selectedBuildingId = mBuildingList.get(index).getBuildingId();
         switch (index) {
             case 0:
-                Building building = mBuildingList.get(index);
+
                 b = new Bundle();
                 b.putInt("building_id", building.getBuildingId());
                 b.putString("building_name", building.getName());
