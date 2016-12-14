@@ -87,6 +87,35 @@ public class ListBuilding extends android.support.v4.app.Fragment implements Swi
         setHasOptionsMenu(true);
 
     }
+//    @Override
+//    public boolean onContextItemSelected(MenuItem item) {
+////        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+////        int index = info.position;
+//        int index = item.getOrder();
+//
+//
+//        switch (index) {
+//            case 0:
+//                Bundle b;
+//                b = new Bundle();
+//                b.putInt("building_id", selectedBuilding.getBuildingId());
+//                b.putString("building_name", building.getName());
+//                b.putString("building_address", building.getAddress());
+//                b.putString("building_description", building.getDescription());
+//                mCallback.passData(b, context.getResources().getString(R.string.edit));
+//                return true;
+//            case 1:
+//
+//                openDialog();
+//                return true;
+//
+//
+//            default:
+//                return false;
+//        }
+//    }
+//
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -237,65 +266,8 @@ public class ListBuilding extends android.support.v4.app.Fragment implements Swi
 
     }
 
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-//        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-//        int index = info.position;
-        int index = item.getOrder();
-        Building building = mBuildingList.get(index);
-
-        selectedBuildingId = mBuildingList.get(index).getBuildingId();
-        switch (index) {
-            case 0:
-
-                b = new Bundle();
-                b.putInt("building_id", building.getBuildingId());
-                b.putString("building_name", building.getName());
-                b.putString("building_address", building.getAddress());
-                b.putString("building_description", building.getDescription());
-                mCallback.passData(b, getResources().getString(R.string.edit));
-                return true;
-            case 1:
-
-                openDialog();
-                return true;
 
 
-            default:
-                return super.onContextItemSelected(item);
-        }
-    }
-    public void openDialog()
-    {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.getContext());
-        alertDialogBuilder.setTitle(getResources().getString(R.string.deletedata));
-        alertDialogBuilder.setMessage(getResources().getString(R.string.confirmdelete));
-        alertDialogBuilder.setPositiveButton(getResources().getString(R.string.ok),
-                new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        RequestPackage pkg = new RequestPackage();
-                        pkg.setMethod(HttpMethod.DELETE);
-                        pkg.setUri(MainActivity.REST_URI + "/" + selectedBuildingId);
-                        CustomTask deleteTask = new CustomTask(ListBuilding.this);
-                        deleteTask.execute(pkg);
-
-
-                    }
-                });
-        alertDialogBuilder.setNegativeButton(getResources().getString(R.string.cancel),
-                new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                       dialog.dismiss();
-                    }
-                });
-
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
-    }
 
 
 

@@ -43,7 +43,7 @@ import java.util.Locale;
  * Created by vaibhavidesai on 2016-11-04.
  */
 
-public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.BuildingViewHolder> implements Filterable, View.OnClickListener, View.OnCreateContextMenuListener {
+public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.BuildingViewHolder> implements CustomTask.AsyncResponse,Filterable, View.OnClickListener, View.OnCreateContextMenuListener {
 
     private final DataPassListener mCallback;
     List<Boolean> newArray;
@@ -58,6 +58,7 @@ public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.Buildi
     private boolean isFavorite = false;
     private View view;
      Building building;
+    private Building selectedBuilding;
 
 
     public BuildingAdapter(List<Building> buildingList, Context context) {
@@ -99,6 +100,8 @@ public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.Buildi
             ImageLoader loader = new ImageLoader();
             loader.execute(container);
         }
+
+            selectedBuilding = buildingList.get(position);
 
         holder.itemView.setOnCreateContextMenuListener(this);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -211,13 +214,82 @@ public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.Buildi
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        menu.add(0, R.id.edit, 0, "Edit");
-        menu.add(0, R.id.delete, 1, "Delete");
+
+        MenuItem editAction=menu.add(0, R.id.edit, 0, "Edit");
+        MenuItem delete=menu.add(0, R.id.delete, 1, "Delete");
+        editAction.setOnMenuItemClickListener(mOnMyActionClickListener);
+        delete.setOnMenuItemClickListener(mOnMyActionClickListener);
 
     }
 
+    private final MenuItem.OnMenuItemClickListener mOnMyActionClickListener = new MenuItem.OnMenuItemClickListener() {
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            int index = item.getOrder();
 
 
+            switch (index) {
+                case 0:
+                    Bundle b;
+                    b = new Bundle();
+                    b.putInt("building_id", selectedBuilding.getBuildingId());
+                    b.putString("building_name", selectedBuilding.getName());
+                    b.putString("building_address", selectedBuilding.getAddress());
+                    b.putString("building_description", selectedBuilding.getDescription());
+                    mCallback.passData(b, context.getResources().getString(R.string.edit));
+                    return true;
+                case 1:
+
+                    openDialog();
+                    return true;
+
+
+                default:
+                    return false;
+
+
+            }
+        }
+
+
+    };
+        public void openDialog()
+        {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+            alertDialogBuilder.setTitle(context.getResources().getString(R.string.deletedata));
+            alertDialogBuilder.setMessage(context.getResources().getString(R.string.confirmdelete));
+            alertDialogBuilder.setPositiveButton(context.getResources().getString(R.string.ok),
+                    new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            RequestPackage pkg = new RequestPackage();
+                            pkg.setMethod(HttpMethod.DELETE);
+                            pkg.setUri(MainActivity.REST_URI + "/" + selectedBuilding.getBuildingId());
+                            CustomTask deleteTask = new CustomTask(BuildingAdapter.this);
+                            deleteTask.execute(pkg);
+
+
+                        }
+                    });
+            alertDialogBuilder.setNegativeButton(context.getResources().getString(R.string.cancel),
+                    new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+        }
+
+
+    @Override
+    public void processFinish(String output, String method) {
+
+    }
 
 
     public class BuildingViewHolder extends RecyclerView.ViewHolder {
