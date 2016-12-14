@@ -12,7 +12,7 @@ FR # 4 Upload Image
   Status : Complete
   
 FR# 5 Delete Building 
-    Status : Complete
+    Status : Record deleted Complete
     UI does not get updated without reopening the app
     
 FR# 6 Favorite Building
