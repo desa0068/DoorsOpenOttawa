@@ -14,6 +14,7 @@ FR # 4 Upload Image
 FR# 5 Delete Building 
     Status : Complete
     
+    
 FR# 6 Favorite Building
   Status : Building is added to favorites and removed from Set<String> array and preferences but the icon does not get changed
   
