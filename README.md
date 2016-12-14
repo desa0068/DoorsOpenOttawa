@@ -15,7 +15,7 @@ FR# 5 Delete Building
     Status : Complete
     
 FR# 6 Favorite Building
-  Status : Building is added to favorites and removed from Set<String> array but the icon does not get changed
+  Status : Building is added to favorites and removed from Set<String> array and preferences but the icon does not get changed
   
 FR#7 Sort Building Alphabetically 
   Status : Done
